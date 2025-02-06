@@ -36,13 +36,7 @@ function playRound(playerSelection, computerSelection) {
 
 function playGame() {
     let score = 0;
-    for (let i = 0; i < 5; i++) {
-        const playerSelection = prompt("Enter your choice: ");
-        const computerSelection = getComputerChoice();
-        console.log("Player choice: " + playerSelection);
-        console.log("Computer choice: " + computerSelection);
-        let result = playRound(playerSelection, computerSelection);
-
+    
         // if (result === "Player wins!") {
         //     score++;
         // } else if (result === "Computer wins!") {
