@@ -35,7 +35,7 @@ body {
     font-weight: 600;
 }
 
-.score {
+.scoreboard {
     color: #000000;
     font-size: 25px;
     display: flex;
@@ -66,18 +66,37 @@ body {
     align-items: center;
 }
 
+.weapons {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 16px;
+}
+
 button {
     width: 200px;      /* Set a fixed width */
     height: 200px;     /* Optionally, set a fixed height */
-    padding: 8px 16px; /* You can still use padding if it fits your design */
-    font-size: clamp(12px, 2vw, 50px);
-    font-weight: 600;
+    /* padding: 8px 16px;  */
+    /* You can still use padding if it fits your design */
+    /* font-size: clamp(12px, 2vw, 50px); */
+    /* font-weight: 600; */
     border: none;
     border-radius: 8px;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* vertical-align: middle; */
     
     /* Optional: If the text might be too long, you can control overflow */
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
 }
