@@ -46,13 +46,23 @@ body {
     font-weight: 600;
 }
 
+.score-and-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
 .play-area {
     display: flex;
     flex-grow: 1;
-    flex-direction: column;
-    justify-content: space-evenly;
+    flex-direction: row;
+    /* justify-content: space-around; */
+    justify-content: center;
     align-items: center;
-    gap: 16px;
+    gap: 160px;
+    padding-top: 60px;
     list-style-type: none;
     font-size: 18px;
     color: #000000;
@@ -68,14 +78,22 @@ body {
 
 .weapons {
     display: flex;
+    border: #000000 2px solid;
+    border-radius: 20px;
+    width: 75%;
+    /* height: 0% */
+    padding: 5%;
+    /* height: fit-content; */
     justify-content: space-evenly;
+    flex-direction: column;
     align-items: center;
-    gap: 16px;
+    gap: 8px;
 }
 
+
 button {
-    width: 200px;      /* Set a fixed width */
-    height: 200px;     /* Optionally, set a fixed height */
+    width: 120px;      /* Set a fixed width */
+    height: 120px;     /* Optionally, set a fixed height */
     /* padding: 8px 16px;  */
     /* You can still use padding if it fits your design */
     /* font-size: clamp(12px, 2vw, 50px); */
@@ -87,7 +105,10 @@ button {
     justify-content: center;
     align-items: center;
     /* vertical-align: middle; */
+    /* background-color: #f1f1f1; */
     
+    /* Optional: Apply a subtle box-shadow */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     /* Optional: If the text might be too long, you can control overflow */
     overflow: hidden;
     white-space: nowrap;
@@ -99,4 +120,32 @@ img {
     height: 100%;
     object-fit: cover;
     border-radius: 8px;
+}
+
+.with-text-user {
+    display: flex;
+    width: 25%;
+    /* border: #000000 4px solid; */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.with-text-computer {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    justify-content: center;
+    align-items: center;
+}
+
+.labelw {
+    font-size: 24px;
+    color: #000000;
+    font-weight: 600;
+}
+
+.with-text-computer .weapons button {
+    pointer-events: none; /* Disables interaction */
+    /* opacity: 0.7; (Optional) Makes them look inactive */
 }

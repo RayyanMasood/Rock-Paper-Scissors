@@ -1,107 +1,125 @@
-// the JavaScript file
-// METHODS 2 & 3
-function alertFunction() {
-alert("YAY! YOU DID IT!");
-}
-
-const rockBtn = document.querySelector(".rock");
-const paperBtn = document.querySelector(".paper");
-const scissorsBtn = document.querySelector(".scissors");
-
-
-// rockBtn.onclick = alertFunction;
-
-// METHOD 3
-// rockBtn.addEventListener("click", alertFunction);
-
-// On click, a random choice is generated for the computer between the three buttons, and when the computer selects something that beats you, the color of your button becomes red and theirs green. If you win, the opposite happens. If it's a tie, both buttons turn yellow. Functionality below
-
 document.addEventListener("DOMContentLoaded", function () {
     const rockBtn = document.querySelector(".rock");
     const paperBtn = document.querySelector(".paper");
     const scissorsBtn = document.querySelector(".scissors");
+
+    const compRockBtn = document.querySelector(".with-text-computer .rock");
+    const compPaperBtn = document.querySelector(".with-text-computer .paper");
+    const compScissorsBtn = document.querySelector(".with-text-computer .scissors");
 
     let wins = 0;
     let losses = 0;
     let ties = 0;
 
     function getComputerChoice() {
-        let rand = Math.floor(Math.random() * 3); // 0 to 2
-        if (rand === 0) {
-            return "Rock";
-        } else if (rand === 1) {
-            return "Paper";
-        } else {
-            return "Scissors";
-        }
+        let choices = ["Rock", "Paper", "Scissors"];
+        return choices[Math.floor(Math.random() * 3)];
     }
 
-    let rPrevColor = rockBtn.style.backgroundColor;
-    let pPrevColor = paperBtn.style.backgroundColor;
-    let sPrevColor = scissorsBtn.style.backgroundColor;
-
-    function colorReset() {
-        rockBtn.style.backgroundColor = rPrevColor;
-        paperBtn.style.backgroundColor = pPrevColor;
-        scissorsBtn.style.backgroundColor = sPrevColor;
+    function resetColors() {
+        [rockBtn, paperBtn, scissorsBtn, compRockBtn, compPaperBtn, compScissorsBtn].forEach(btn => {
+            btn.style.backgroundColor = "";
+            btn.style.outline = "";
+        });
     }
 
-    rockBtn.addEventListener("click", function () {
-        let computerChoice = getComputerChoice();
-        if (computerChoice === "Rock") {
-            rockBtn.style.backgroundColor = "yellow";
-            ties++;
-        } else if (computerChoice === "Paper") {
-            rockBtn.style.backgroundColor = "red";
-            paperBtn.style.backgroundColor = "green";
-            losses++;
-        } else {
-            rockBtn.style.backgroundColor = "green";
-            scissorsBtn.style.backgroundColor = "red";
-            wins++;
-        }
-        // reset color after 1 second
-        setTimeout(colorReset, 1000);
-        updateScreen();
-    });
+    function animateComputerChoice(finalChoice, userChoice) {
+        let choices = [compRockBtn, compPaperBtn, compScissorsBtn];
+        let index = 0;
+        let cycleCount = 0;
+        let maxCycles = 20; // Controls how long the animation runs
+        let intervalTime = 200; // Starting speed
+        let minInterval = 50; // Fastest it gets
+        let slowdownFactor = 1.1; // Factor by which it slows down
+        let currentInterval;
 
-    paperBtn.addEventListener("click", function () {
-        let computerChoice = getComputerChoice();
-        if (computerChoice === "Rock") {
-            paperBtn.style.backgroundColor = "green";
-            rockBtn.style.backgroundColor = "red";
-            wins++;
-        } else if (computerChoice === "Paper") {
-            paperBtn.style.backgroundColor = "yellow";
+        function cycle() {
+            if (cycleCount >= maxCycles) {
+                clearInterval(currentInterval);
+                finalizeChoice(finalChoice, userChoice);
+                return;
+            }
+
+            // Remove outline from all
+            choices.forEach(btn => btn.style.outline = "none");
+
+            // Apply outline to current choice
+            choices[index].style.outline = "3px solid blue";
+
+            // Move to the next choice
+            index = (index + 1) % choices.length;
+            cycleCount++;
+
+            // Adjust speed: first it speeds up, then slows down
+            if (intervalTime > minInterval) {
+                intervalTime = Math.max(minInterval, intervalTime * 0.9); // Speeds up
+            } else if (cycleCount > maxCycles / 2) {
+                intervalTime *= slowdownFactor; // Slows down
+            }
+
+            currentInterval = setTimeout(cycle, intervalTime);
+        }
+
+        cycle(); // Start cycling
+    }
+
+    function finalizeChoice(computerChoice, userChoice) {
+        // Remove all outlines
+        [compRockBtn, compPaperBtn, compScissorsBtn].forEach(btn => btn.style.outline = "none");
+
+        let computerBtn;
+        if (computerChoice === "Rock") computerBtn = compRockBtn;
+        else if (computerChoice === "Paper") computerBtn = compPaperBtn;
+        else computerBtn = compScissorsBtn;
+
+        let userBtn;
+        if (userChoice === "Rock") userBtn = rockBtn;
+        else if (userChoice === "Paper") userBtn = paperBtn;
+        else userBtn = scissorsBtn;
+
+        // Apply outline to final computer choice
+        computerBtn.style.outline = "3px solid blue";
+
+        // Determine result
+        if (userChoice === computerChoice) {
+            userBtn.style.backgroundColor = "yellow";
+            computerBtn.style.backgroundColor = "yellow";
             ties++;
+        } else if (
+            (userChoice === "Rock" && computerChoice === "Scissors") ||
+            (userChoice === "Paper" && computerChoice === "Rock") ||
+            (userChoice === "Scissors" && computerChoice === "Paper")
+        ) {
+            userBtn.style.backgroundColor = "green";
+            computerBtn.style.backgroundColor = "red";
+            wins++;
         } else {
-            paperBtn.style.backgroundColor = "red";
-            scissorsBtn.style.backgroundColor = "green";
+            userBtn.style.backgroundColor = "red";
+            computerBtn.style.backgroundColor = "green";
             losses++;
         }
-        setTimeout(colorReset, 1000);
-        updateScreen();
-    });
 
-    scissorsBtn.addEventListener("click", function () {
+        updateScreen();
+        setTimeout(resetColors, 1000);
+    }
+
+    function handleUserClick(userChoice) {
+        resetColors(); // Clear previous selections
+
         let computerChoice = getComputerChoice();
-        if (computerChoice === "Rock") {
-            scissorsBtn.style.backgroundColor = "red";
-            rockBtn.style.backgroundColor = "green";
-            losses++;
-        } else if (computerChoice === "Paper") {
-            scissorsBtn.style.backgroundColor = "green";
-            paperBtn.style.backgroundColor = "red";
-            wins++;
-        } else {
-            scissorsBtn.style.backgroundColor = "yellow";
-            ties++;
-        }
-        setTimeout(colorReset, 1000);
-        updateScreen();
-    });
+        let userBtn;
+        if (userChoice === "Rock") userBtn = rockBtn;
+        else if (userChoice === "Paper") userBtn = paperBtn;
+        else userBtn = scissorsBtn;
 
-    // update all of them on screen
+        userBtn.style.outline = "3px solid blue"; // Temporary outline for user
+        animateComputerChoice(computerChoice, userChoice);
+    }
+
+    rockBtn.addEventListener("click", () => handleUserClick("Rock"));
+    paperBtn.addEventListener("click", () => handleUserClick("Paper"));
+    scissorsBtn.addEventListener("click", () => handleUserClick("Scissors"));
+
     const winsEl = document.querySelector(".wins .score");
     const lossesEl = document.querySelector(".losses .score");
     const tiesEl = document.querySelector(".ties .score");
